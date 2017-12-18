@@ -1,0 +1,19 @@
+{
+  "name": "error-catch",
+  "version": "1.0.0",
+  "description": "FE-error-catch-sys",
+  "main": "app.js",
+  "scripts": {
+    "test": "dev"
+  },
+  "author": "rebecca",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "^2.4.1",
+    "koa-body": "^2.5.0",
+    "koa-router": "^7.3.0",
+    "koa-view": "^2.1.1",
+    "mongodb": "^3.0.0-rc0",
+    "mongoose": "^4.13.7"
+  }
+}
