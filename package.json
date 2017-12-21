@@ -9,11 +9,14 @@
   "author": "rebecca",
   "license": "ISC",
   "dependencies": {
+    "fs": "0.0.1-security",
     "koa": "^2.4.1",
     "koa-body": "^2.5.0",
     "koa-router": "^7.3.0",
+    "koa-static": "^4.0.2",
     "koa-view": "^2.1.1",
     "mongodb": "^3.0.0-rc0",
-    "mongoose": "^4.13.7"
+    "mongoose": "^4.13.7",
+    "source-map": "^0.6.1"
   }
 }
