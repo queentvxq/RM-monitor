@@ -6,10 +6,9 @@ const mongoose = require('mongoose');//db
 const koaBody = require('koa-body');
 
 const router = new Router();
-const Schema = mongoose.Schema;
 
-import { transferByMap } from './sourcemap'
-import { ErrorSchema } from './schema'
+const { transferByMap } = require('./sourcemap');
+const { ErrorSchema } = require('./../db/schema');
 
 mongoose.connect('mongodb://localhost/test');
 const app = new Koa();
@@ -22,8 +21,6 @@ app
 	.use(router.allowedMethods())
 
 // data model
-
-
 const Error = mongoose.model('Error', ErrorSchema);
 
 //index.html
@@ -41,12 +38,15 @@ router.post('/api/insertError', async (ctx, next)=>{
 	const { info, stack, url, col, line, time, browser } = ctx.request.body;
 	//sourcemap transfer line&col info
 	const numInfo = transferByMap (line, col, 'app.js');
+	console.log('======= complier success =======');
+	console.log(numInfo);
+	console.log('')
 	// new Obj named pusher
 	// set pusher attributes
 	const suffix = url.split('//')[1]//
 	const host = suffix.split('/')[0]
 	const pusher = new Error(
-		Object.assign({ 
+		Object.assign({
 			info: info || 'undefined',
 			stack: stack || [],
 			url: url.split(host)[1] || '/main',
@@ -93,7 +93,7 @@ Error.aggregate(
 //query data from db
 router.get('/api/query', async (ctx, next)=>{
 	console.log('-----rqt');
-	console.log(ctx.request.body);
+	// console.log(ctx.request.body);
 	const { startTime, endTime, url, host } = ctx.request.body
 
 	//query by host
@@ -101,12 +101,28 @@ router.get('/api/query', async (ctx, next)=>{
 	//     return this.find({host: new RegExp(name, "ig")});
 	// }
 	
-	await Error.find().exec(function(err, errors){
+	await Error.find()
+	.sort({"time" : -1})
+	.limit(10)
+	.exec(function(err, errors){
 	    // err && return console.error(err);
 	    console.log('================');
-	    console.log(errors);
+	    // console.log(errors);
 	    console.log(errors.length);
-	    ctx.response.body = JSON.stringify({errors})
+	    const _errors = errors.map((error)=>{
+	    	const time = error.time;
+	    	let _time = "";
+	    	if(time) {
+	    		_time = time.getFullYear()+"/"+(time.getMonth()+1)+"/"+time.getDate()+" "
+	    		+ time.getHours() + ":" + time.getMinutes();
+	    	}
+	    	// error.localtime = _time;
+	    	// console.log(error);
+	    	return Object.assign({},error._doc,{localtime:_time});
+	    })
+	    console.log('======== error ========'+_errors[0]);
+
+	    ctx.response.body = JSON.stringify({errors:_errors,success:'true'})
 	});
 	await next();
 	ctx.response.status = 200;

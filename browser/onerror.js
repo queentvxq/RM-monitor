@@ -19,7 +19,7 @@ window.onerror = function(e, url, line, col, error) {
             	url: url,
             	line: line,
             	col: col || (window.event && window.event.errorCharacter) || 0,
-            	time: new Date(),
+            	time: new Date().getTime(),
                 browser: navigator.appVersion
             };
             

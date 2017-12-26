@@ -1,4 +1,7 @@
-export const ErrorSchema = new Schema({
+const mongoose = require('mongoose');//db
+const Schema = mongoose.Schema;
+
+exports.ErrorSchema = new Schema({
   info: String,//其他错误信息
   stack: [String],//错误堆栈信息
   time: {type: Date, index: true},//错误生成时间

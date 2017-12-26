@@ -2,22 +2,35 @@
 <html>
 <head>
     <title>错误监控</title>
-    <style type="text/css">
-        td,th {
-            border:1px solid #555;
-            border-collapse: collapse;
+    <script>
+        function loadFromCDN(url) {
+            console.log(url);
         }
-    </style>
+    </script>
+    <link rel="stylesheet" type="text/css" href="./libs/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://sitecdn.zcy.gov.cn/finance-login/styles/qwhjhqjw.css?_=12121" onerror="loadFromCDN()">
 </head>
 <body>
-    <table>
+    <div class="form-inline">
+      <div class="form-group">
+        <label for="startTime">开始时间</label>
+        <input type="text" class="form-control" id="startTime">
+      </div>
+      <div class="form-group">
+        <label for="endTime">结束时间</label>
+        <input type="text" class="form-control" id="endTime">
+      </div>
+      <button type="button" class="btn btn-default">搜索</button>
+    </div>
+    <table class="table">
         <thead>
             <tr>
+                <th width="60">序号</th>
                 <th>项目(域名)</th>
                 <th>页面(路径)</th>
                 <th>报错时间</th>
-                <th>报错行</th>
-                <th>报错列</th>
+                <th width="40">行</th>
+                <th width="40">列</th>
                 <th>错误信息</th>
                 <th>浏览器信息</th>
             </tr>
@@ -25,9 +38,9 @@
         <tbody id='errorTbody'></tbody>
     </table>
 
-<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-<script src="onerror.js" crossorigin></script>
-<script src="main.js" crossorigin></script>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js" onerror="loadFromCDN('https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js')"></script>
+<script src="browser/onerror.js" crossorigin></script>
+<script src="browser/main.js" crossorigin></script>
 </body>
 </html>
 

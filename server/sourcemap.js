@@ -1,7 +1,7 @@
 const sourceMap = require("source-map");
 const fs = require("fs");
 
-export const transferByMap = async (line, col, filename)=>{
+exports.transferByMap = async (line, col, filename)=>{
 	const info = await complier(line, col, filename);
 	return info;
 }
