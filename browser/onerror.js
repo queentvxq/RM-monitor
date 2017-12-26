@@ -14,13 +14,14 @@ window.onerror = function(e, url, line, col, error) {
         }
         setTimeout(() => {
 
-            const data = {
+            var data = {
             	info: e || error.message,
             	url: url,
             	line: line,
             	col: col || (window.event && window.event.errorCharacter) || 0,
             	time: new Date().getTime(),
-                browser: navigator.appVersion
+                browser: navigator.appVersion,
+                screen: window.screen.width+' x '+window.screen.height
             };
             
 
@@ -76,27 +77,27 @@ window.onerror = function(e, url, line, col, error) {
 	
 }
 
-var getStackTrace = function () {
-    var stack = [];
-    var f = arguments.callee.caller;
-    while (f) {
-        stack.push(getFunctionName(f));
-        f = f.caller;
-    }
-    return stack;
-}
+// var getStackTrace = function () {
+//     var stack = [];
+//     var f = arguments.callee.caller;
+//     while (f) {
+//         stack.push(getFunctionName(f));
+//         f = f.caller;
+//     }
+//     return stack;
+// }
 
-var sendHttpError = function(data) {
-    $.ajax({
-        url: '/api/insertError',
-        type: 'POST',
-        data: JSON.stringify(data),
-        contentType: 'application/json',
-        success: function(){
-            console.log('http error report success');
-        }
-    })
-}
+// var sendHttpError = function(data) {
+//     $.ajax({
+//         url: '/api/insertError',
+//         type: 'POST',
+//         data: JSON.stringify(data),
+//         contentType: 'application/json',
+//         success: function(){
+//             console.log('http error report success');
+//         }
+//     })
+// }
 
 // $.ajaxSetup({
 //     error: function(jqXHR){

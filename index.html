@@ -3,24 +3,50 @@
 <head>
     <title>错误监控</title>
     <script>
-        function loadFromCDN(url) {
+        var loadFromCDN = function(url) {
             console.log(url);
+            var data = {
+                info: 'cdn load error',
+                url: url,
+                line: 0,
+                col: 0,
+                time: new Date().getTime(),
+                browser: navigator.appVersion,
+                screen: window.screen.width+' x '+window.screen.height
+            };
+            var xmlhttp;
+            if (window.XMLHttpRequest) {
+                // code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            }else {
+                // code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    console.log('error reported');
+                }
+            }
+            xmlhttp.open("POST","/api/insertError",true);
+            xmlhttp.setRequestHeader("Content-type","application/json");
+            xmlhttp.send(JSON.stringify(data));
         }
     </script>
     <link rel="stylesheet" type="text/css" href="./libs/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://sitecdn.zcy.gov.cn/finance-login/styles/qwhjhqjw.css?_=12121" onerror="loadFromCDN()">
+    <link href="./libs/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="https://sitecdn.zcy.gov.cn/finance-login/styles/qwhjhqjw.css?_=12121" onerror="loadFromCDN('https://sitecdn.zcy.gov.cn/finance-login/styles/qwhjhqjw.css?_=12121')">
 </head>
 <body>
     <div class="form-inline">
       <div class="form-group">
         <label for="startTime">开始时间</label>
-        <input type="text" class="form-control" id="startTime">
+        <input type="text" class="form-control date" id="startTime">
       </div>
       <div class="form-group">
         <label for="endTime">结束时间</label>
-        <input type="text" class="form-control" id="endTime">
+        <input type="text" class="form-control date" id="endTime">
       </div>
-      <button type="button" class="btn btn-default">搜索</button>
+      <button type="button" class="btn btn-default" id="seachBtn">搜索</button>
     </div>
     <table class="table">
         <thead>
@@ -39,6 +65,7 @@
     </table>
 
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js" onerror="loadFromCDN('https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js')"></script>
+<script src="libs/js/bootstrap-datetimepicker.min.js" crossorigin></script>
 <script src="browser/onerror.js" crossorigin></script>
 <script src="browser/main.js" crossorigin></script>
 </body>

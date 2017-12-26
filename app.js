@@ -7,8 +7,8 @@ const koaBody = require('koa-body');
 
 const router = new Router();
 
-const { transferByMap } = require('./sourcemap');
-const { ErrorSchema } = require('./../db/schema');
+const { transferByMap } = require('./server/sourcemap');
+const { ErrorSchema } = require('./db/schema');
 
 mongoose.connect('mongodb://localhost/test');
 const app = new Koa();
@@ -38,10 +38,9 @@ router.post('/api/insertError', async (ctx, next)=>{
 	const { info, stack, url, col, line, time, browser } = ctx.request.body;
 	//sourcemap transfer line&col info
 	let numInfo = {};
-	if(line&&line>0){
+	if(line && line > 0){
 		numInfo = transferByMap (line, col, 'app.js');
 	}
-	
 	console.log('======= complier success =======');
 	console.log(numInfo);
 	console.log('')
@@ -97,15 +96,22 @@ Error.aggregate(
 //query data from db
 router.get('/api/query', async (ctx, next)=>{
 	console.log('-----rqt');
-	console.log(this.params);
-	const { startTime, endTime, url, host } = this.params
+	console.log(ctx.request.query);
+	const { startTime, endTime, url, host } = ctx.request.query;
 
 	//query by host
 	// ErrorSchema.query.byHost = function(host){
 	//     return this.find({host: new RegExp(name, "ig")});
 	// }
-	
-	await Error.find({"time":{$gte:(startTime||0).getTime(),$lte:(endTime||0).getTime()}})
+	const _st = new Date(startTime||0).getTime();
+	const _et = new Date(endTime||999999999999999).getTime();
+	const timeRule = {
+		"time":{
+			$gte:_st,
+			$lte:_et
+		}
+	};
+	await Error.find(timeRule)
 	.sort({"time" : -1})
 	.limit(10)
 	.exec(function(err, errors){

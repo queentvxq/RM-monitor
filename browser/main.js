@@ -7,11 +7,8 @@ if (window.XMLHttpRequest) {
     // code for IE6, IE5
     xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 }
-xmlhttp.onreadystatechange = function() {
-    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-        console.log(xmlhttp);
-        var data = JSON.parse(xmlhttp.response);
-        var html = ''
+var renderTable = function(data){
+    var html = ''
         for(var i=0;i < data.errors.length;i++){
             var _d = data.errors[i];
             html += '<tr><td>'+(i+1)+'</td><td>'+_d.host+'</td><td>' +_d.url+'</td><td>' +
@@ -19,15 +16,41 @@ xmlhttp.onreadystatechange = function() {
             _d.col + '</td><td>' + JSON.stringify(_d.stack) + '</td><td>'
             + _d.browser + '</td></tr>';
         }
-        document.getElementById('errorTbody').innerHTML = html;
+    document.getElementById('errorTbody').innerHTML = html;
+}
+xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        console.log(xmlhttp);
+        var data = JSON.parse(xmlhttp.response);
+        renderTable(data);
     }
 }
-xmlhttp.open("GET","/api/query",true);
+xmlhttp.open("GET","/api/query?startTime=",true);
 xmlhttp.send();
 
-$.ajax({
-    url:'/api/test'
-})
+var $st = $('#startTime');
+var $et = $('#endTime');
 
+var search = function(){
+    $.ajax({
+        url:'/api/query?startTime='+$st.val()+'&endTime='+$et.val(),
+        type:'get',
+        success:(rsp)=>{
+            var data = JSON.parse(rsp)
+            renderTable(data);
+        }
+    })
+}
+
+$('#seachBtn').on('click',()=>{
+    search();
+})
 //throw error
 // throw new Error('error test!!!');
+
+$('.date').datetimepicker({
+    minView: 2,
+    maxView: 2,
+    autoclose: true,
+    format:"yyyy/mm/dd"
+});
