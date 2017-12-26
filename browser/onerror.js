@@ -77,6 +77,36 @@ window.onerror = function(e, url, line, col, error) {
 	
 }
 
+var errorFromCDN = function(url) {
+    console.log(url);
+    var data = {
+        info: 'cdn load error',
+        url: url,
+        line: 0,
+        col: 0,
+        time: new Date().getTime(),
+        browser: navigator.appVersion,
+        screen: window.screen.width+' x '+window.screen.height,
+        stack:['cdn load error']
+    };
+    var xmlhttp;
+    if (window.XMLHttpRequest) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    }else {
+        // code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            console.log('error reported');
+        }
+    }
+    xmlhttp.open("POST","/api/insertError",true);
+    xmlhttp.setRequestHeader("Content-type","application/json");
+    xmlhttp.send(JSON.stringify(data));
+}
+
 // var getStackTrace = function () {
 //     var stack = [];
 //     var f = arguments.callee.caller;

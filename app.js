@@ -10,7 +10,7 @@ const router = new Router();
 const { transferByMap } = require('./server/sourcemap');
 const { ErrorSchema } = require('./db/schema');
 
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://172.16.101.38:27017/error');
 const app = new Koa();
 
 app
@@ -130,8 +130,6 @@ router.get('/api/query', async (ctx, next)=>{
 	    	// console.log(error);
 	    	return Object.assign({},error._doc,{localtime:_time});
 	    })
-	    console.log('======== error ========'+_errors[0]);
-
 	    ctx.response.body = JSON.stringify({errors:_errors,success:'true'})
 	});
 	await next();
@@ -144,8 +142,8 @@ router.get('/api/test', async (ctx, next)=>{
 });
 
 
-app.listen(3005, function(){
-	console.log('listen to ------ 3005')
+app.listen(80, function(){
+	console.log('listen to ------ 80')
 });
 
 
