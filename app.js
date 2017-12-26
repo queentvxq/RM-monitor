@@ -142,8 +142,8 @@ router.get('/api/test', async (ctx, next)=>{
 });
 
 
-app.listen(80, function(){
-	console.log('listen to ------ 80')
+app.listen(3000, function(){
+	console.log('listen to ------ 3000')
 });
 
 
