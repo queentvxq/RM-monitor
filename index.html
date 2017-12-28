@@ -2,39 +2,10 @@
 <html>
 <head>
     <title>错误监控</title>
-    <script>
-        var loadFromCDN = function(url) {
-            console.log(url);
-            var data = {
-                info: 'cdn load error',
-                url: url,
-                line: 0,
-                col: 0,
-                time: new Date().getTime(),
-                browser: navigator.appVersion,
-                screen: window.screen.width+' x '+window.screen.height
-            };
-            var xmlhttp;
-            if (window.XMLHttpRequest) {
-                // code for IE7+, Firefox, Chrome, Opera, Safari
-                xmlhttp = new XMLHttpRequest();
-            }else {
-                // code for IE6, IE5
-                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-            xmlhttp.onreadystatechange = function() {
-                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                    console.log('error reported');
-                }
-            }
-            xmlhttp.open("POST","/api/insertError",true);
-            xmlhttp.setRequestHeader("Content-type","application/json");
-            xmlhttp.send(JSON.stringify(data));
-        }
-    </script>
+    <script src="browser/onerror.js" crossorigin></script>
     <link rel="stylesheet" type="text/css" href="./libs/css/bootstrap.min.css">
     <link href="./libs/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
-    <link rel="stylesheet" href="https://sitecdn.zcy.gov.cn/finance-login/styles/qwhjhqjw.css?_=12121" onerror="loadFromCDN('https://sitecdn.zcy.gov.cn/finance-login/styles/qwhjhqjw.css?_=12121')">
+    <!-- <link rel="stylesheet" href="https://sitecdn.zcy.gov.cn/finance-login/styles/qwhjhqjw.css?_=12121" onerror="errorFromCDN('https://sitecdn.zcy.gov.cn/finance-login/styles/qwhjhqjw.css?_=12121')"> -->
 </head>
 <body>
     <div class="form-inline">
@@ -52,8 +23,8 @@
         <thead>
             <tr>
                 <th width="60">序号</th>
-                <th>项目(域名)</th>
-                <th>页面(路径)</th>
+                <th>项目(页面)</th>
+                <th>文件(路径)</th>
                 <th>报错时间</th>
                 <th width="40">行</th>
                 <th width="40">列</th>
@@ -64,9 +35,8 @@
         <tbody id='errorTbody'></tbody>
     </table>
 
-<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js" onerror="loadFromCDN('https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js')"></script>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script src="libs/js/bootstrap-datetimepicker.min.js" crossorigin></script>
-<script src="browser/onerror.js" crossorigin></script>
 <script src="browser/main.js" crossorigin></script>
 </body>
 </html>

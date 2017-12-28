@@ -5,6 +5,17 @@
  * @param {Long}    col   出错代码的列号
  * @param {Object}  error       错误的详细信息，可能包含堆栈
  */
+var host = {
+    test: 'http://172.16.101.38:3000',
+    dev:  'http://localhost:3000'
+}
+var URL = host.test + "/api/insertError";
+
+var DEFAULT_DATA = {
+    page: window.location.href,
+    screen: window.screen.width+' x '+window.screen.height,
+    browser: navigator.appVersion,
+}
 
 window.onerror = function(e, url, line, col, error) {
 
@@ -18,6 +29,7 @@ window.onerror = function(e, url, line, col, error) {
             	info: e || error.message,
             	url: url,
             	line: line,
+                page: window.location.href,
             	col: col || (window.event && window.event.errorCharacter) || 0,
             	time: new Date().getTime(),
                 browser: navigator.appVersion,
@@ -48,37 +60,17 @@ window.onerror = function(e, url, line, col, error) {
 						+ line + ':' + col + ')'
 				}
             }
-            //把data上报到后台！
-            //这里可以做日志上报
-            console.log('========= before send msg');
-            console.log(data);
-            //send request
-            var xmlhttp;
-			if (window.XMLHttpRequest) {
-				// code for IE7+, Firefox, Chrome, Opera, Safari
-				xmlhttp = new XMLHttpRequest();
-			}else {
-				// code for IE6, IE5
-				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-			}
-			xmlhttp.onreadystatechange = function() {
-				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-					console.log('error report success');
-				}
-			}
-			xmlhttp.open("POST","/api/insertError",true);
-			xmlhttp.setRequestHeader("Content-type","application/json");
-			xmlhttp.send(JSON.stringify(data));
 
-           console.log('======= after send msg');
-           
+   //          console.log('========= before send msg');
+            sendRequest(data);
+   //         console.log('======= after send msg');
+
         }, 0);
         return false;
 	
 }
 
 var errorFromCDN = function(url) {
-    console.log(url);
     var data = {
         info: 'cdn load error',
         url: url,
@@ -87,24 +79,38 @@ var errorFromCDN = function(url) {
         time: new Date().getTime(),
         browser: navigator.appVersion,
         screen: window.screen.width+' x '+window.screen.height,
-        stack:['cdn load error']
+        stack:'cdn load error',
+        page: window.location.href
     };
-    var xmlhttp;
-    if (window.XMLHttpRequest) {
-        // code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp = new XMLHttpRequest();
-    }else {
-        // code for IE6, IE5
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            console.log('error reported');
-        }
-    }
-    xmlhttp.open("POST","/api/insertError",true);
-    xmlhttp.setRequestHeader("Content-type","application/json");
-    xmlhttp.send(JSON.stringify(data));
+    // var xmlhttp;
+    // if (window.XMLHttpRequest) {
+    //     // code for IE7+, Firefox, Chrome, Opera, Safari
+    //     xmlhttp = new XMLHttpRequest();
+    // }else {
+    //     // code for IE6, IE5
+    //     xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    // }
+    // xmlhttp.onreadystatechange = function() {
+    //     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+    //         console.log('error reported');
+    //     }
+    // }
+    // xmlhttp.open("POST","",true);
+    // xmlhttp.setRequestHeader("Content-type","application/json");
+    // xmlhttp.send(JSON.stringify(data));
+
+    sendRequest(data);
+}
+
+//jsonp cross-domain
+const sendRequest = function(data){
+  var ts = new Date().getTime().toString();
+  var fakeImg = new Image(0, 0);
+  fakeImg.src = URL + '?data=' + encodeURIComponent(JSON.stringify(data)) + '&_=' + ts;
+  fakeImg.onload = function() {
+    console.log('error reported');
+  }
+  document.body.appendChild(fakeImg);
 }
 
 // var getStackTrace = function () {

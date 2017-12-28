@@ -7,6 +7,7 @@ exports.ErrorSchema = new Schema({
   time: {type: Date, index: true},//错误生成时间
   url: String,//报错文件地址
   host: String,//错误域名（用于定位项目）
+  page: String,//页面地址
   col: Number,//错误列
   line: Number,//错误行
   browser: String,//报错浏览器信息

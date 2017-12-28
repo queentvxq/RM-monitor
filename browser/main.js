@@ -11,7 +11,7 @@ var renderTable = function(data){
     var html = ''
         for(var i=0;i < data.errors.length;i++){
             var _d = data.errors[i];
-            html += '<tr><td>'+(i+1)+'</td><td>'+_d.host+'</td><td>' +_d.url+'</td><td>' +
+            html += '<tr><td>'+(i+1)+'</td><td>'+_d.page+'</td><td>' +_d.url+'</td><td>' +
             _d.localtime + '</td><td>' + _d.line + '</td><td>'+
             _d.col + '</td><td>' + JSON.stringify(_d.stack) + '</td><td>'
             + _d.browser + '</td></tr>';
@@ -45,8 +45,6 @@ var search = function(){
 $('#seachBtn').on('click',()=>{
     search();
 })
-//throw error
-// throw new Error('error test!!!');
 
 $('.date').datetimepicker({
     minView: 2,
@@ -54,3 +52,5 @@ $('.date').datetimepicker({
     autoclose: true,
     format:"yyyy/mm/dd"
 });
+
+// throw new Error();

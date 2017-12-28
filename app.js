@@ -10,7 +10,12 @@ const router = new Router();
 const { transferByMap } = require('./server/sourcemap');
 const { ErrorSchema } = require('./db/schema');
 
-mongoose.connect('mongodb://172.16.101.38:27017/error');
+const host = {
+	dev: 'mongodb://localhost/test',
+	test: 'mongodb://172.16.101.38:27017/error'
+}
+mongoose.connect(host.test);
+
 const app = new Koa();
 
 app
@@ -30,12 +35,11 @@ router.get('/', async (ctx, next) => {
 })
 
 //insert reported error into db
-router.post('/api/insertError', async (ctx, next)=>{
+router.get('/api/insertError', async (ctx, next)=>{
 	console.log('-----rqt');
-	// debugger;
-	console.log(ctx.request.body);
-	console.log(`${Date.now()} ${ctx.request.method} ${ctx.request.url}`);
-	const { info, stack, url, col, line, time, browser } = ctx.request.body;
+	console.log(ctx.request.query.data);
+	const data = ctx.request.query.data
+	const { info, stack, url, col, line, time, browser, page, screen } = JSON.parse(data);
 	//sourcemap transfer line&col info
 	let numInfo = {};
 	if(line && line > 0){
@@ -50,14 +54,16 @@ router.post('/api/insertError', async (ctx, next)=>{
 	const host = suffix.split('/')[0]
 	const pusher = new Error(
 		Object.assign({
-			info: info || 'undefined',
+			info: info || 'error',
 			stack: stack || [],
-			url: url.split(host)[1] || '/main',
-			host: host || 'middle.zcy.gov.cn',
+			url: url || '',
+			host: host || '',
 			col: col,
+			page: page,
 			line: line,
 			time: time,
-			browser: browser
+			browser: browser,
+			screen: screen||'0 x 0'
 		},numInfo)
 	);
 
@@ -67,10 +73,7 @@ router.post('/api/insertError', async (ctx, next)=>{
 			console.error('======save error======');
 		}
 		console.log('get a error');
-		ctx.response.body  = 'success'
-		// ctx.response.json({
-  		//     message : 'success'
-  		// });
+		ctx.response.body  = 'success';
 	});
 	await next();
 	ctx.response.status = 200;
@@ -95,8 +98,7 @@ Error.aggregate(
 
 //query data from db
 router.get('/api/query', async (ctx, next)=>{
-	console.log('-----rqt');
-	console.log(ctx.request.query);
+	console.log('-----rqt query');
 	const { startTime, endTime, url, host } = ctx.request.query;
 
 	//query by host
@@ -115,10 +117,8 @@ router.get('/api/query', async (ctx, next)=>{
 	.sort({"time" : -1})
 	.limit(10)
 	.exec(function(err, errors){
-	    // err && return console.error(err);
-	    console.log('================');
-	    // console.log(errors);
-	    console.log(errors.length);
+	    err && return console.log(err);
+
 	    const _errors = errors.map((error)=>{
 	    	const time = error.time;
 	    	let _time = "";
@@ -137,7 +137,7 @@ router.get('/api/query', async (ctx, next)=>{
 });
 
 router.get('/api/test', async (ctx, next)=>{
-	console.log(ctx.requesteee.body);
+	console.log(ctx.request.body);
 	ctx.response.status = 500;
 });
 
