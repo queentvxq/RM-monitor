@@ -13,7 +13,7 @@ const url = {
 
 const complier = (line, col, filename)=>{
 	console.log(`${filename}.map`);
-	request.get({
+	return request.get({
 		url:`${url.assist}${filename}.map`,
 		json:true
 	}, function (error, response, data) {
