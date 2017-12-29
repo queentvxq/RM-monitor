@@ -8,7 +8,7 @@ exports.ErrorSchema = new Schema({
   url: String,//报错文件地址
   host: String,//错误域名（用于定位项目）
   page: String,//页面地址
-  col: Number,//错误列
+  column: Number,//错误列
   line: Number,//错误行
   browser: String,//报错浏览器信息
   name: String,//sourcemap指向位置的代码信息

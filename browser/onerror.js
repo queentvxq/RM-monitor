@@ -30,7 +30,7 @@ try{
                 	url: url,
                 	line: line,
                     page: window.location.href,
-                	col: col || (window.event && window.event.errorCharacter) || 0,
+                	column: col || (window.event && window.event.errorCharacter) || 0,
                 	time: new Date().getTime(),
                     browser: navigator.appVersion,
                     screen: window.screen.width+' x '+window.screen.height
@@ -79,7 +79,7 @@ var errorFromCDN = function(url) {
         info: 'cdn load error',
         url: url,
         line: 0,
-        col: 0,
+        column: 0,
         time: new Date().getTime(),
         browser: navigator.appVersion,
         screen: window.screen.width+' x '+window.screen.height,

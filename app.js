@@ -67,10 +67,10 @@ router.get('/api/insertError', async (ctx, next)=>{
 			stack: stack || ['cdn load error'],
 			url: url || '',//报错文件地址
 			host: host || '',
-			col: col,
-			page: page,//页面地址
-			line: line,
-			time: time,
+			column: col,
+			page,//页面地址
+			line,
+			time,
 			browser: browser,
 			screen: screen||'0 x 0'
 		},numInfo)
