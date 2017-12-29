@@ -50,13 +50,13 @@ router.get('/api/insertError', async (ctx, next)=>{
 	//sourcemap transfer line&col info
 	let numInfo = {};
 	const filename = getFilenameByURL(url);
-
+	console.log(filename);
 	if(line && line > 0 && filename.indexOf('js')){
 		numInfo = transferByMap (line, col, filename);
+		console.log('======= complier success =======');
 	}
-	console.log('======= complier success =======');
 	console.log(numInfo);
-	console.log('')
+	console.log('=======numInfo========')
 	// new Obj named pusher
 	// set pusher attributes
 	const suffix = url.split('//')[1]//
