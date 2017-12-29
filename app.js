@@ -52,7 +52,7 @@ router.get('/api/insertError', async (ctx, next)=>{
 	const filename = getFilenameByURL(url);
 	console.log(filename);
 	if(line && line > 0 && filename.indexOf('js')){
-		numInfo = transferByMap (line, col, filename);
+		numInfo = await transferByMap (line, col, filename);
 		console.log('======= complier success =======');
 	}
 	console.log(numInfo);
