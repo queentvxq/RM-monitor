@@ -34,16 +34,25 @@ router.get('/', async (ctx, next) => {
   await ctx.render('../index');
 })
 
+const getFilenameByURL = function(url) {
+	const _arr = url.split('/');
+	const l = _arr.length;
+	return _arr[l-1];
+}
+
 //insert reported error into db
 router.get('/api/insertError', async (ctx, next)=>{
 	console.log('-----rqt');
 	console.log(ctx.request.query.data);
 	const data = ctx.request.query.data
 	const { info, stack, url, col, line, time, browser, page, screen } = JSON.parse(data);
+
 	//sourcemap transfer line&col info
 	let numInfo = {};
-	if(line && line > 0){
-		numInfo = transferByMap (line, col, 'app.js');
+	const filename = getFilenameByURL(url);
+
+	if(line && line > 0 && filename.indexOf('js')){
+		numInfo = transferByMap (line, col, filename);
 	}
 	console.log('======= complier success =======');
 	console.log(numInfo);
@@ -55,11 +64,11 @@ router.get('/api/insertError', async (ctx, next)=>{
 	const pusher = new Error(
 		Object.assign({
 			info: info || 'error',
-			stack: stack || [],
-			url: url || '',
+			stack: stack || ['cdn load error'],
+			url: url || '',//报错文件地址
 			host: host || '',
 			col: col,
-			page: page,
+			page: page,//页面地址
 			line: line,
 			time: time,
 			browser: browser,
@@ -70,9 +79,9 @@ router.get('/api/insertError', async (ctx, next)=>{
 	//mongoose save a record  in mongodb named test
 	await pusher.save(function (err) {
 		if (err) {
-			console.error('======save error======');
+			console.log('======save error======');
 		}
-		console.log('get a error');
+		console.log('=========get a error=========');
 		ctx.response.body  = 'success';
 	});
 	await next();

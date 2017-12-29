@@ -16,58 +16,62 @@ var DEFAULT_DATA = {
     screen: window.screen.width+' x '+window.screen.height,
     browser: navigator.appVersion,
 }
+try{
+    window.onerror = function(e, url, line, col, error) {
 
-window.onerror = function(e, url, line, col, error) {
-
-        //URL
-        if (e != "Script error." && !url) {
-            return false;
-        }
-        setTimeout(() => {
-
-            var data = {
-            	info: e || error.message,
-            	url: url,
-            	line: line,
-                page: window.location.href,
-            	col: col || (window.event && window.event.errorCharacter) || 0,
-            	time: new Date().getTime(),
-                browser: navigator.appVersion,
-                screen: window.screen.width+' x '+window.screen.height
-            };
-            
-
-            if (!!error && !!error.stack) {
-                //use stack directly
-                data.stack = error.stack.toString();
-            } else if (!!arguments.callee) {
-                //get stack by callee
-                var ext = [];
-                var f = arguments.callee.caller, c = 3;
-                //这里只拿三层堆栈信息
-                while (f && (--c > 0)) {
-                    ext.push(f.toString());
-                    if (f === f.caller) {
-                        break;//如果有环
-                    }
-                    f = f.caller;
-                }
-                ext = ext.join(",");
-                data.stack = ext;
-            }else {
-            	if(!error.stack) {
-					data.stack += '\n\tat '+ fnName + ' (http://.../)' + url + ':'
-						+ line + ':' + col + ')'
-				}
+            //URL
+            if (e != "Script error." && !url) {
+                return false;
             }
+            setTimeout(() => {
 
-   //          console.log('========= before send msg');
-            sendRequest(data);
-   //         console.log('======= after send msg');
+                var data = {
+                	info: e || error.message,
+                	url: url,
+                	line: line,
+                    page: window.location.href,
+                	col: col || (window.event && window.event.errorCharacter) || 0,
+                	time: new Date().getTime(),
+                    browser: navigator.appVersion,
+                    screen: window.screen.width+' x '+window.screen.height
+                };
+                
 
-        }, 0);
-        return false;
-	
+                if (!!error && !!error.stack) {
+                    //use stack directly
+                    data.stack = error.stack.toString();
+                } else if (!!arguments.callee) {
+                    //get stack by callee
+                    var ext = [];
+                    var f = arguments.callee.caller, c = 3;
+                    //这里只拿三层堆栈信息
+                    while (f && (--c > 0)) {
+                        ext.push(f.toString());
+                        if (f === f.caller) {
+                            break;//如果有环
+                        }
+                        f = f.caller;
+                    }
+                    ext = ext.join(",");
+                    data.stack = ext;
+                }else {
+                	if(!error.stack) {
+    					data.stack += '\n\tat '+ fnName + ' (http://.../)' + url + ':'
+    						+ line + ':' + col + ')'
+    				}
+                }
+
+                console.log('========= before send msg');
+                sendRequest(data);
+               console.log('======= after send msg');
+
+            }, 0);
+            return false;
+    	
+    }
+}catch (e){
+    console.log('===== onerror ======');
+    console.log(e);
 }
 
 var errorFromCDN = function(url) {

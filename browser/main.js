@@ -11,9 +11,10 @@ var renderTable = function(data){
     var html = ''
         for(var i=0;i < data.errors.length;i++){
             var _d = data.errors[i];
+            var stack = (typeof _d.stack === 'string')?_d.stack:JSON.stringify(_d.stack);
             html += '<tr><td>'+(i+1)+'</td><td>'+_d.page+'</td><td>' +_d.url+'</td><td>' +
             _d.localtime + '</td><td>' + _d.line + '</td><td>'+
-            _d.col + '</td><td>' + JSON.stringify(_d.stack) + '</td><td>'
+            _d.col + '</td><td>' + stack + '</td><td>'
             + _d.browser + '</td></tr>';
         }
     document.getElementById('errorTbody').innerHTML = html;
