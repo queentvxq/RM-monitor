@@ -126,7 +126,9 @@ router.get('/api/query', async (ctx, next)=>{
 	.sort({"time" : -1})
 	.limit(10)
 	.exec(function(err, errors){
-	    err && return console.log(err);
+		if(err) {
+			return console.log(err);
+		}
 
 	    const _errors = errors.map((error)=>{
 	    	const time = error.time;
