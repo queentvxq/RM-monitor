@@ -48,14 +48,13 @@ router.get('/api/insertError', async (ctx, next)=>{
 	const { info, stack, url, col, line, time, browser, page, screen } = JSON.parse(data);
 
 	//sourcemap transfer line&col info
-	let numInfo = {};
 	const filename = getFilenameByURL(url);
 	console.log(filename);
 	if(line && line > 0 && filename.indexOf('js')){
-		numInfo = await transferByMap (line, col, filename);
+		{ line:_l, column:_c } = await transferByMap (line, col, filename);
 		console.log('======= complier success =======');
 	}
-	console.log(numInfo);
+	console.log({_l,_c});
 	console.log('=======numInfo========')
 	// new Obj named pusher
 	// set pusher attributes
@@ -73,7 +72,10 @@ router.get('/api/insertError', async (ctx, next)=>{
 			time,
 			browser: browser,
 			screen: screen||'0 x 0'
-		},numInfo)
+		},{
+			line:_l||line,
+			column:_c||col
+		})
 	);
 
 	//mongoose save a record  in mongodb named test
