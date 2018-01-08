@@ -28,9 +28,10 @@ const complier = async (line, col, filename)=>{
 			    const consumer = new sourceMap.SourceMapConsumer(data);
 				const numInfo = consumer.originalPositionFor(_num);
 				console.log(numInfo);
-				if(numInfo && numInfo.line && numInfo.column)
+				if(numInfo && numInfo.line && numInfo.column){
 					resolve(numInfo);
 					return numInfo;
+				}
 				else{
 					resolve(_num);
 					return _num;
