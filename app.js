@@ -59,8 +59,8 @@ router.get('/api/insertError', async (ctx, next)=>{
 	console.log('=======numInfo========')
 	// new Obj named pusher
 	// set pusher attributes
-	const suffix = url.split('//')[1]//
-	const host = suffix.split('/')[0]
+	const suffix = page.split('//')[1]//
+	const host = suffix.split('/')[0]//页面域名区分项目
 	const pusher = new Error(
 		Object.assign({
 			info: info || 'error',
