@@ -45,16 +45,17 @@ router.get('/api/insertError', async (ctx, next)=>{
 	console.log('-----rqt');
 	console.log(ctx.request.query.data);
 	const data = ctx.request.query.data
-	const { info, stack, url, col, line, time, browser, page, screen } = JSON.parse(data);
+	const { info, stack, url, column, line, time, browser, page, screen } = JSON.parse(data);
 
 	//sourcemap transfer line&col info
+	let numInfo = {};
 	const filename = getFilenameByURL(url);
 	console.log(filename);
 	if(line && line > 0 && filename.indexOf('js')){
-		let { line:_l, column:_c } = await transferByMap (line, col, filename);
+		numInfo = await transferByMap (line, column, filename);
 		console.log('======= complier success =======');
 	}
-	console.log({_l,_c});
+	console.log(numInfo);
 	console.log('=======numInfo========')
 	// new Obj named pusher
 	// set pusher attributes
@@ -66,16 +67,13 @@ router.get('/api/insertError', async (ctx, next)=>{
 			stack: stack || ['cdn load error'],
 			url: url || '',//报错文件地址
 			host: host || '',
-			column: col,
+			column,
 			page,//页面地址
 			line,
 			time,
 			browser: browser,
 			screen: screen||'0 x 0'
-		},{
-			line:_l||line,
-			column:_c||col
-		})
+		},numInfo)
 	);
 
 	//mongoose save a record  in mongodb named test
