@@ -62,7 +62,7 @@ try{
                 }
 
                 console.log('========= before send msg');
-                sendRequest(data);
+                RMsendRequest(data);
                console.log('======= after send msg');
 
             }, 0);
@@ -103,11 +103,11 @@ var errorFromCDN = function(url) {
     // xmlhttp.setRequestHeader("Content-type","application/json");
     // xmlhttp.send(JSON.stringify(data));
 
-    sendRequest(data);
+    RMsendRequest(data);
 }
 
 //jsonp cross-domain
-const sendRequest = function(data){
+var RMsendRequest = function(data){
   var ts = new Date().getTime().toString();
   var fakeImg = new Image(0, 0);
   fakeImg.src = URL + '?data=' + encodeURIComponent(JSON.stringify(data)) + '&_=' + ts;
