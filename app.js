@@ -9,7 +9,7 @@ const router = new Router();
 
 const { transferByMap } = require('./server/sourcemap');
 const { ErrorSchema } = require('./db/schema');
-
+const server = require('./server/router');
 const host = {
 	dev: 'mongodb://localhost/test',
 	test: 'mongodb://172.16.101.38:27017/error'
@@ -88,22 +88,37 @@ router.get('/api/insertError', async (ctx, next)=>{
 	ctx.response.status = 200;
 });
 
-Error.aggregate(
-	{
-		$group:{
-			_id: { host: '$host',url: '$url' },
-			info : {$push: "$info"}
+router.get('/api/analysis/byHost', async (ctx, next)=>{
+	await Error.aggregate(
+		{
+			$group:{
+				_id : { host: '$host',url: '$url' },
+				info: { $push: "$info"},
+				size: { $sum: 1 }
+			}
+		},
+		{
+			$sort:{size:-1}
+		},
+		{
+			$group:{
+				_id : '$_id.host',
+				list: { $push: {url:'$_id.url',info:'$info'} },
+				size: { $sum:1 }
+			}
+		},
+		{
+			$sort:{size:-1}
 		}
-	},
-	{
-		$group:{
-			_id:'$_id.host',
-			list: {$push: {url:'$_id.url',info:'$info'}}
-		}
-	},
-).exec(function(err,lists){
-	console.log(JSON.stringify(lists))
+	).exec(function(err,lists){
+		// console.log(JSON.stringify(lists))
+		ctx.response.body = JSON.stringify(lists);
+	});
+	await next();
+	ctx.response.status = 200;
 });
+
+router.get('/api/analysis/byError', server.byError);
 
 //query data from db
 router.get('/api/query', async (ctx, next)=>{
@@ -124,7 +139,7 @@ router.get('/api/query', async (ctx, next)=>{
 	};
 	await Error.find(timeRule)
 	.sort({"time" : -1})
-	.limit(10)
+	.limit(100)
 	.exec(function(err, errors){
 		if(err) {
 			return console.log(err);

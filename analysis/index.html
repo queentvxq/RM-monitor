@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>错误统计</title>
+    <link rel="stylesheet" type="text/css" href="../libs/css/bootstrap.min.css">
+    <link href="../libs/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+    <style type="text/css">
+        .table-fixed{
+            table-layout:fixed;
+        }
+        .table-fixed td{
+            text-overflow: ellipsis;
+            overflow: hidden;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-inline">
+      <div class="form-group">
+        <label for="startTime">开始时间</label>
+        <input type="text" class="form-control date" id="startTime">
+      </div>
+      <div class="form-group">
+        <label for="endTime">结束时间</label>
+        <input type="text" class="form-control date" id="endTime">
+      </div>
+      <div class="form-group">
+        <label for="url">页面地址/域名</label>
+        <input type="text" class="form-control" id="URL">
+      </div>
+      <button type="button" class="btn btn-default" id="seachBtn">搜索</button>
+    </div>
+
+
+    <table class="table table-fixed">
+        <thead>
+            <tr>
+                <th width="100">序号</th>
+                <th>报错页面</th>
+                <th width="200">错误信息</th>
+                <th>错误次数</th>
+            </tr>
+        </thead>
+        <tbody id='errorTbody'></tbody>
+    </table>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th width="60">序号</th>
+                <th>项目(域名)</th>
+                <th>报错页面数</th>
+                <th>报错url</th>
+                <th>报错次数</th>
+            </tr>
+        </thead>
+        <tbody id='hostTbody'></tbody>
+    </table>
+
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="../libs/js/bootstrap-datetimepicker.min.js" crossorigin></script>
+<script src="../browser/analysis.js" crossorigin></script>
+</body>
+</html>
+
