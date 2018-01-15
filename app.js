@@ -88,35 +88,7 @@ router.get('/api/insertError', async (ctx, next)=>{
 	ctx.response.status = 200;
 });
 
-router.get('/api/analysis/byHost', async (ctx, next)=>{
-	await Error.aggregate(
-		{
-			$group:{
-				_id : { host: '$host',url: '$url' },
-				info: { $push: "$info"},
-				size: { $sum: 1 }
-			}
-		},
-		{
-			$sort:{size:-1}
-		},
-		{
-			$group:{
-				_id : '$_id.host',
-				list: { $push: {url:'$_id.url',info:'$info'} },
-				size: { $sum:1 }
-			}
-		},
-		{
-			$sort:{size:-1}
-		}
-	).exec(function(err,lists){
-		// console.log(JSON.stringify(lists))
-		ctx.response.body = JSON.stringify(lists);
-	});
-	await next();
-	ctx.response.status = 200;
-});
+router.get('/api/analysis/byHost', server.byHost);
 
 router.get('/api/analysis/byError', server.byError);
 
