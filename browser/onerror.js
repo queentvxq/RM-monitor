@@ -5,13 +5,13 @@
  * @param {Long}    col   出错代码的列号
  * @param {Object}  error       错误的详细信息，可能包含堆栈
  */
-var host = {
+var RM_host = {
     test: 'http://172.16.101.38:3000',
     dev:  'http://localhost:3000'
 }
-var URL = host.test + "/api/insertError";
+var RM_URL = RM_host.test + "/api/insertError";
 
-var DEFAULT_DATA = {
+var RM_DEFAULT_DATA = {
     page: window.location.href,
     screen: window.screen.width+' x '+window.screen.height,
     browser: navigator.appVersion,
@@ -110,7 +110,7 @@ var errorFromCDN = function(url) {
 var RMsendRequest = function(data){
   var ts = new Date().getTime().toString();
   var fakeImg = new Image(0, 0);
-  fakeImg.src = URL + '?data=' + encodeURIComponent(JSON.stringify(data)) + '&_=' + ts;
+  fakeImg.src = RM_URL + '?data=' + encodeURIComponent(JSON.stringify(data)) + '&_=' + ts;
   fakeImg.onload = function() {
     console.log('error reported');
   }
