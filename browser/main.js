@@ -14,7 +14,7 @@ var renderTable = function(data){
             var stack = (typeof _d.stack === 'string')?_d.stack:JSON.stringify(_d.stack);
             html += '<tr><td>'+(i+1)+'</td><td>'+_d.page+'</td><td>' +_d.url+'</td><td>' +
             _d.localtime + '</td><td>' + _d.line + '</td><td>'+
-            _d.column + '</td><td>' + stack + '</td><td>' + _d.info + '</td><td>'
+            _d.column + '</td><td><p>' + stack + '</p></td><td>' + _d.info + '</td><td>'
             + _d.browser + '</td></tr>';
         }
     document.getElementById('errorTbody').innerHTML = html;

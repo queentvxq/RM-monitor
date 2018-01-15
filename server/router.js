@@ -17,12 +17,15 @@ const getTimeRule = (startTime,endTime)=>{
 }
 
 const byError = async (ctx, next)=>{
-	const { startTime, endTime, url, host } = ctx.request.query;
+	const { startTime, endTime, url, host, page } = ctx.request.query;
 	const timeRule = getTimeRule(startTime,endTime);
 	await Error
 		.aggregate([
 			{
 				$match:timeRule,
+			},
+			{
+				$match:{page:{$regex:page}},
 			},
 			{   
 
@@ -44,4 +47,45 @@ const byError = async (ctx, next)=>{
 	ctx.response.status = 200;
 }
 
-module.exports = { byError,getTimeRule };
+const query = async (ctx, next)=>{
+	console.log('-----rqt query');
+	const { startTime, endTime, url, host } = ctx.request.query;
+
+	//query by host
+	// ErrorSchema.query.byHost = function(host){
+	//     return this.find({host: new RegExp(name, "ig")});
+	// }
+	const _st = new Date(startTime||0).getTime();
+	const _et = new Date(endTime||999999999999999).getTime();
+	const timeRule = {
+		"time":{
+			$gte:_st,
+			$lte:_et
+		}
+	};
+	await Error.find(timeRule)
+	.sort({"time" : -1})
+	.limit(100)
+	.exec(function(err, errors){
+		if(err) {
+			return console.log(err);
+		}
+
+	    const _errors = errors.map((error)=>{
+	    	const time = error.time;
+	    	let _time = "";
+	    	if(time) {
+	    		_time = time.getFullYear()+"/"+(time.getMonth()+1)+"/"+time.getDate()+" "
+	    		+ time.getHours() + ":" + time.getMinutes();
+	    	}
+	    	// error.localtime = _time;
+	    	// console.log(error);
+	    	return Object.assign({},error._doc,{localtime:_time});
+	    })
+	    ctx.response.body = JSON.stringify({errors:_errors,success:'true'})
+	});
+	await next();
+	ctx.response.status = 200;
+}
+
+module.exports = { byError,getTimeRule, query };

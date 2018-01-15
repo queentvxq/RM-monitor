@@ -6,39 +6,81 @@
     <link rel="stylesheet" type="text/css" href="./libs/css/bootstrap.min.css">
     <link href="./libs/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <!-- <link rel="stylesheet" href="https://sitecdn.zcy.gov.cn/finance-login/styles/qwhjhqjw.css?_=12121" onerror="errorFromCDN('https://sitecdn.zcy.gov.cn/finance-login/styles/qwhjhqjw.css?_=12121')"> -->
+    <style type="text/css">
+        .table-fixed{
+            table-layout:fixed;
+        }
+        tr {
+            max-height: 50px;
+        }
+        .table-fixed td{
+            text-overflow: ellipsis;
+            overflow: hidden;
+            word-wrap: break-word;
+            max-height: 50px;
+            overflow-y: hidden;
+        }
+        .table-fixed td p{
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .navbar {
+            background-color: #6f5499;
+        }
+        .navbar a{
+            color: #ffffff;
+        }
+        .nav>li>a:hover, .nav>li>a:focus {
+            color: #6f5499;
+        }
+    </style>
 </head>
 <body>
-    <div class="form-inline">
-      <div class="form-group">
-        <label for="startTime">开始时间</label>
-        <input type="text" class="form-control date" id="startTime">
+    <header class="navbar navbar-static-top bs-docs-nav" id="top">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="./" class="navbar-brand">错误监控</a>
+        </div>
+        <nav id="bs-navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/analysis/index.html" target="_blank">数据统计</a></li>
+          </ul>
+        </nav>
       </div>
-      <div class="form-group">
-        <label for="endTime">结束时间</label>
-        <input type="text" class="form-control date" id="endTime">
-      </div>
-      <div class="form-group">
-        <label for="url">页面地址/域名</label>
-        <input type="text" class="form-control" id="URL">
-      </div>
-      <button type="button" class="btn btn-default" id="seachBtn">搜索</button>
+    </header>
+    <div class="container bs-docs-container">
+        <div class="form-inline">
+          <div class="form-group">
+            <label for="startTime">开始时间</label>
+            <input type="text" class="form-control date" id="startTime">
+          </div>
+          <div class="form-group">
+            <label for="endTime">结束时间</label>
+            <input type="text" class="form-control date" id="endTime">
+          </div>
+          <div class="form-group">
+            <label for="url">页面地址/域名</label>
+            <input type="text" class="form-control" id="URL">
+          </div>
+          <button type="button" class="btn btn-default" id="seachBtn">搜索</button>
+        </div>
+        <table class="table table-fixed table-striped">
+            <thead>
+                <tr>
+                    <th width="60">序号</th>
+                    <th>项目(页面)</th>
+                    <th>文件(路径)</th>
+                    <th>报错时间</th>
+                    <th width="40">行</th>
+                    <th width="40">列</th>
+                    <th>错误堆栈</th>
+                    <th>错误信息</th>
+                    <th>浏览器信息</th>
+                </tr>
+            </thead>
+            <tbody id='errorTbody'></tbody>
+        </table>
     </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th width="60">序号</th>
-                <th>项目(页面)</th>
-                <th>文件(路径)</th>
-                <th>报错时间</th>
-                <th width="40">行</th>
-                <th width="40">列</th>
-                <th>错误堆栈</th>
-                <th>错误信息</th>
-                <th>浏览器信息</th>
-            </tr>
-        </thead>
-        <tbody id='errorTbody'></tbody>
-    </table>
 
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script src="libs/js/bootstrap-datetimepicker.min.js" crossorigin></script>

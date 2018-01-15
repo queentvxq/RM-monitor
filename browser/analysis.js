@@ -32,10 +32,11 @@ var renderTableByError = function(data){
 
 var $st = $('#startTime');
 var $et = $('#endTime');
+var $url = $('#URL');
 
 var search = function(){
     $.ajax({
-        url:'/api/analysis/byHost?startTime='+$st.val()+'&endTime='+$et.val(),
+        url:'/api/analysis/byHost?startTime='+$st.val()+'&endTime='+$et.val()+'&page='+$url.val(),
         type:'get',
         success:(rsp)=>{
             var data = JSON.parse(rsp)
@@ -43,7 +44,7 @@ var search = function(){
         }
     })
     $.ajax({
-        url:'/api/analysis/byError?startTime='+$st.val()+'&endTime='+$et.val(),
+        url:'/api/analysis/byError?startTime='+$st.val()+'&endTime='+$et.val()+'&page='+$url.val(),
         type:'get',
         success:(rsp)=>{
             var data = JSON.parse(rsp)
