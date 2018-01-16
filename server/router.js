@@ -102,7 +102,7 @@ const query = async (ctx, next)=>{
 		}
 	};
 	await Error.find(timeRule)
-	.find({"page":{$regex:page}})
+	.find({"page":{$regex:page||''}})
 	.sort({"time" : -1})
 	.limit(100)
 	.exec(function(err, errors){

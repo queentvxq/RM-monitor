@@ -4,8 +4,8 @@ const request = require('request');
 
 const url = {
 	assist:'https://git.cai-inc.com/ZCY-FE/zcy-assist-front/raw/master/maps/assets_assist/scripts/',
-	annoucement: 'https://git.cai-inc.com/ZCY-FE/zcy-annoucement-front/raw/master/maps/assets_assist/scripts/',
-	middle: 'https://git.cai-inc.com/ZCY-FE/web-union/raw/master/maps/assets_assist/scripts/',
+	annoucement: 'https://git.cai-inc.com/ZCY-FE/zcy-annoucement-front/raw/master/maps/assets/scripts/',
+	middle: 'https://git.cai-inc.com/ZCY-FE/web-union/raw/master/maps/assets/scripts/',
 	statistics: ''
 }
 

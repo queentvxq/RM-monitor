@@ -31,10 +31,10 @@ xmlhttp.send();
 
 var $st = $('#startTime');
 var $et = $('#endTime');
-
+var $page = $('#URL');
 var search = function(){
     $.ajax({
-        url:'/api/query?startTime='+$st.val()+'&endTime='+$et.val(),
+        url:'/api/query?startTime='+$st.val()+'&endTime='+$et.val()+'&page='+$page.val(),
         type:'get',
         success:(rsp)=>{
             var data = JSON.parse(rsp)
