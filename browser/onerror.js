@@ -23,7 +23,7 @@ try{
             if (e != "Script error." && !url) {
                 return false;
             }
-            setTimeout(() => {
+            setTimeout(function() {
 
                 var data = {
                 	info: e || error.message,
@@ -61,9 +61,9 @@ try{
     				}
                 }
 
-                console.log('========= before send msg');
+                // console.log('========= before send msg');
                 RMsendRequest(data);
-               console.log('======= after send msg');
+               // console.log('======= after send msg');
 
             }, 0);
             return false;
