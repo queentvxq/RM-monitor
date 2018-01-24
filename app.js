@@ -7,14 +7,14 @@ const koaBody = require('koa-body');
 
 const router = new Router();
 
-const { transferByMap } = require('./server/sourcemap');
+const { transferByMap,transferStack } = require('./server/sourcemap');
 const { ErrorSchema } = require('./db/schema');
 const server = require('./server/router');
 const host = {
 	dev: 'mongodb://localhost/test',
 	test: 'mongodb://172.16.101.38:27017/error'
 }
-mongoose.connect(host.test);
+mongoose.connect(host.dev);
 
 const app = new Koa();
 
@@ -43,7 +43,7 @@ const getFilenameByURL = function(url) {
 //insert reported error into db
 router.get('/api/insertError', async (ctx, next)=>{
 	console.log('-----rqt');
-	console.log(ctx.request.query.data);
+	// console.log(ctx.request.query.data);
 	const data = ctx.request.query.data
 	const { info, stack, url, column, line, time, browser, page, screen } = JSON.parse(data);
 
@@ -52,7 +52,11 @@ router.get('/api/insertError', async (ctx, next)=>{
 	const filename = getFilenameByURL(url);
 	console.log(filename);
 	if(line && line > 0 && filename.indexOf('js')){
-		numInfo = await transferByMap (line, column, filename);
+		// numInfo = await transferByMap (line, column, filename, page);
+		const TS = new transferStack (stack, ()=>{
+			console.log('=====done=====')
+		}, {path:page});
+		numInfo = await TS.transStack(stack,{path:page});
 		console.log('======= complier success =======');
 	}
 	console.log(numInfo);
