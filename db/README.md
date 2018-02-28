@@ -12,7 +12,7 @@ mongodb shell base operations/commond
 - db.[collection name].find()（查询集合中所有文档/数据）
 - db.[collection name].insert()（向集合中添加文档）
 
-###常用命令
+### 常用命令
 
 - export PATH=/usr/local/mongodb/bin:$PATH（设定环境变量）
 - sudo mongod --config etc/mongod.conf（使用config文件启动mongodb）
